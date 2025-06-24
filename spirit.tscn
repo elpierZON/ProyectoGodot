@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://dsh5lwnx6rju6"]
+
+[ext_resource type="Script" uid="uid://pqu2pg2kqh0x" path="res://spirit.gd" id="1_dwg7c"]
+[ext_resource type="Texture2D" uid="uid://wou61grabkc6" path="res://spirit/move/0.png" id="6_awgo7"]
+[ext_resource type="Texture2D" uid="uid://8l17k1bolfk1" path="res://spirit/move/1.png" id="7_hkvjs"]
+[ext_resource type="Texture2D" uid="uid://v652yba4mfd2" path="res://spirit/move/2.png" id="8_f2bgc"]
+[ext_resource type="Texture2D" uid="uid://cd74ul3xkedgg" path="res://spirit/move/3.png" id="9_lrhpn"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lmf7m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_awgo7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_hkvjs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_f2bgc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_lrhpn")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dwg7c"]
+radius = 28.0713
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_un7pq"]
+radius = 299.0
+
+[node name="Spirit" type="CharacterBody2D" groups=["enemigos"]]
+collision_layer = 2
+script = ExtResource("1_dwg7c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_lmf7m")
+animation = &"move"
+frame_progress = 0.265465
+
+[node name="Hitbox" type="CollisionShape2D" parent="." groups=["enemigos"]]
+light_mask = 11
+visibility_layer = 2
+position = Vector2(1, 1)
+shape = SubResource("CircleShape2D_dwg7c")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_un7pq")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

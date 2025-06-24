@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://do8xysotdkpmb"]
+
+[ext_resource type="Texture2D" uid="uid://q3mysmdpj637" path="res://corazon.png" id="1_m5ex1"]
+[ext_resource type="Texture2D" uid="uid://b5132oepeigqp" path="res://corazonVacio.png" id="2_0rvqc"]
+
+[sub_resource type="GDScript" id="GDScript_visye"]
+script/source = "extends TextureRect
+
+@export var sprite_lleno: Texture
+@export var sprite_vacio: Texture
+
+func set_lleno(lleno: bool):
+	texture = sprite_lleno if lleno else sprite_vacio
+"
+
+[node name="TextureRect" type="TextureRect"]
+custom_minimum_size = Vector2(16, 16)
+offset_right = 271.0
+offset_bottom = 240.0
+texture = ExtResource("1_m5ex1")
+stretch_mode = 5
+script = SubResource("GDScript_visye")
+sprite_lleno = ExtResource("1_m5ex1")
+sprite_vacio = ExtResource("2_0rvqc")
