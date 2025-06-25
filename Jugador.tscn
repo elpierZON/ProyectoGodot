@@ -35,23 +35,28 @@ script/source = "extends CharacterBody2D
 
 signal vida_actualizada(vida_actual: int, vida_max: int)
 
-@export var speed := 150
+@export var speed := 170
 var current_direction := \"down\"
 var attacking := false
 
-var vida_max := 3
+var vida_max :=30
 var vida := vida_max
 var dashing := false
-var dash_speed := 400
+var dash_speed := 450
 var dash_duration := 0.4
 var dash_cooldown := 0.6
 var puede_dash := true
+const VIDA_POR_CORAZON := 5
+@onready var hud = get_tree().root.get_node(\"Main/HUD\")
+
+
 
 func _on_Area2D_body_entered(body: Node) -> void:
 	if body.is_in_group(\"enemigos\"):
 		body.recibir_danio(50)
 
 func _ready():
+	hud.actualizar_vida(vida, vida_max)
 	add_to_group(\"jugador\")
 	$sword_area.body_entered.connect(_on_Area2D_body_entered)
 	$sword_area/AnimatedSprite2DSword.visible = false
@@ -99,7 +104,7 @@ func _input(event):
 func realizar_ataque():
 	attacking = true
 	var sword = $sword_area/AnimatedSprite2DSword
-	var sword_collision = $sword_area/CollisionShape2D
+	var sword_collision = $sword_area/Hitbox
 	sword.visible = true
 	sword_collision.disabled = false
 	sword.play(current_direction)  
@@ -129,12 +134,12 @@ func realizar_ataque():
 func recibir_danio(cantidad: int):
 	vida -= cantidad
 	vida = clamp(vida, 0, vida_max)
-	actualizar_vida_visual()
 	print(\"Vida actual: \", vida)
+
+	get_node(\"/root/Main/HUD\").actualizar_vida(vida, vida_max)
 
 	if vida <= 0:
 		morir()
-
 func curarse(cantidad: int):
 	vida += cantidad
 	vida = clamp(vida, 0, vida_max)
@@ -176,6 +181,7 @@ func dash():
 	# Espera cooldown antes de permitir otro dash
 	await get_tree().create_timer(dash_cooldown).timeout
 	puede_dash = true
+	
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_73nau"]
@@ -363,7 +369,8 @@ animations = [{
 size = Vector2(11, 34.5)
 
 [node name="Jugador" type="CharacterBody2D" groups=["Jugador"]]
-collision_mask = 4
+collision_layer = 2
+collision_mask = 25
 script = SubResource("GDScript_5m5bb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -371,20 +378,20 @@ position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_73nau")
 animation = &"down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="Hurtbox" type="CollisionShape2D" parent="."]
 light_mask = 0
 position = Vector2(0, -0.75)
 shape = SubResource("RectangleShape2D_loye7")
 
 [node name="sword_area" type="Area2D" parent="."]
-collision_layer = 16
-collision_mask = 2
+collision_layer = 4
+collision_mask = 8
 
 [node name="AnimatedSprite2DSword" type="AnimatedSprite2D" parent="sword_area"]
 sprite_frames = SubResource("SpriteFrames_4jjxg")
 animation = &"down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="sword_area"]
+[node name="Hitbox" type="CollisionShape2D" parent="sword_area"]
 light_mask = 2
 visibility_layer = 8
 position = Vector2(0.5, 2.75)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5132oepeigqp"
-path="res://.godot/imported/corazonVacio.png-58b88d8c3080c4a639243e381b6b67d0.ctex"
+uid="uid://cebix2mrdki21"
+path="res://.godot/imported/Corazon_mitad.png-c41d416ef290131e32234eefe3d7b4d8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://corazonVacio.png"
-dest_files=["res://.godot/imported/corazonVacio.png-58b88d8c3080c4a639243e381b6b67d0.ctex"]
+source_file="res://Corazon_mitad.png"
+dest_files=["res://.godot/imported/Corazon_mitad.png-c41d416ef290131e32234eefe3d7b4d8.ctex"]
 
 [params]
 

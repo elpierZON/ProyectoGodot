@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://do8xysotdkpmb"]
+
+[ext_resource type="Script" uid="uid://c2wtl6dwr6glr" path="res://corazon_hud.gd" id="1_lw7pw"]
+[ext_resource type="Texture2D" uid="uid://w60hvj7acdfx" path="res://Corazon_lleno.png" id="2_0r02o"]
+[ext_resource type="Texture2D" uid="uid://dgd4hjmirktm6" path="res://Corazon_vacio.png" id="4_0r02o"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_lw7pw")
+
+[node name="ContenedoresCorazones" type="HBoxContainer" parent="."]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 42.0
+offset_bottom = 38.0
+
+[node name="corazon_lleno" type="TextureRect" parent="ContenedoresCorazones"]
+layout_mode = 2
+texture = ExtResource("2_0r02o")
+
+[node name="corazon_vacio" type="TextureRect" parent="ContenedoresCorazones"]
+layout_mode = 2
+texture = ExtResource("4_0r02o")

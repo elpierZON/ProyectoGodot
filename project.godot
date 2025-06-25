@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=900
+window/size/viewport_height=720
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
@@ -38,9 +38,11 @@ dash={
 
 [layer_names]
 
-2d_physics/layer_1="Jugador"
-2d_physics/layer_2="Enemigo"
-2d_physics/layer_3="Formas"
+2d_physics/layer_1="enviroment"
+2d_physics/layer_2="Jugador_hurtbox"
+2d_physics/layer_3="jugador_hitbox"
+2d_physics/layer_4="enemigos"
+2d_physics/layer_5="objetos"
 
 [rendering]
 
