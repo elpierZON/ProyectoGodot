@@ -10,7 +10,7 @@ var retroceso_duracion := 0.4
 var retroceso_velocidad := 300.0
 var en_retroceso := false
 var puede_causar_danio_contacto := true
-@export var cooldown_danio_contacto_tiempo := 1.0
+@export var cooldown_danio_contacto_tiempo := 2.0
 
 func _physics_process(delta: float) -> void:
 	if en_retroceso:
@@ -34,7 +34,7 @@ func _physics_process(delta: float) -> void:
 	for i in range(get_slide_collision_count()):
 		var col = get_slide_collision(i)
 		if col.get_collider() and col.get_collider().is_in_group("jugador") and puede_causar_danio_contacto:
-			col.get_collider().recibir_danio(3)
+			col.get_collider().recibir_danio(10)
 			iniciar_cooldown_danio_contacto()
 
 func _on_detection_area_body_entered(body: Node2D) -> void:

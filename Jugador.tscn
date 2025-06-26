@@ -34,20 +34,20 @@
 script/source = "extends CharacterBody2D
 
 signal vida_actualizada(vida_actual: int, vida_max: int)
+@onready var hud = get_tree().current_scene.get_node(\"HUD\")
 
 @export var speed := 170
 var current_direction := \"down\"
 var attacking := false
 
-var vida_max :=30
+var vida_max := 30
 var vida := vida_max
 var dashing := false
 var dash_speed := 450
 var dash_duration := 0.4
 var dash_cooldown := 0.6
 var puede_dash := true
-const VIDA_POR_CORAZON := 5
-@onready var hud = get_tree().root.get_node(\"Main/HUD\")
+const VIDA_POR_CORAZON := 10
 
 
 
@@ -132,11 +132,12 @@ func realizar_ataque():
 
 
 func recibir_danio(cantidad: int):
-	vida -= cantidad
-	vida = clamp(vida, 0, vida_max)
-	print(\"Vida actual: \", vida)
+	vida = clamp(vida - cantidad, 0, vida_max)
+	hud.actualizar_vida(vida, vida_max)
+	print(\"vida restante: %d\" % vida)
 
-	get_node(\"/root/Main/HUD\").actualizar_vida(vida, vida_max)
+	if vida <= 0:
+		morir()
 
 	if vida <= 0:
 		morir()
