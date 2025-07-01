@@ -1,22 +1,101 @@
-[gd_scene load_steps=4 format=3 uid="uid://do8xysotdkpmb"]
+[gd_scene load_steps=17 format=3 uid="uid://do8xysotdkpmb"]
 
 [ext_resource type="Script" uid="uid://c2wtl6dwr6glr" path="res://corazon_hud.gd" id="1_lw7pw"]
 [ext_resource type="Texture2D" uid="uid://w60hvj7acdfx" path="res://Corazon_lleno.png" id="2_ne771"]
+[ext_resource type="Texture2D" uid="uid://u7ukxbatfa0t" path="res://Rupia/rupia1.png" id="4_41shd"]
 [ext_resource type="Texture2D" uid="uid://dgd4hjmirktm6" path="res://Corazon_vacio.png" id="4_gv1iq"]
+[ext_resource type="Texture2D" uid="uid://dk4itjcuxg2gb" path="res://Rupia/rupia2.png" id="5_cb8im"]
+[ext_resource type="Texture2D" uid="uid://cflxkm1iblxpp" path="res://Rupia/rupia3.png" id="6_ptsyy"]
+[ext_resource type="Texture2D" uid="uid://b8u2mayeussjv" path="res://Rupia/rupia4.png" id="7_hq1op"]
+[ext_resource type="Texture2D" uid="uid://dwu3a13ky3gxf" path="res://Rupia/rupia5.png" id="8_kxho0"]
+[ext_resource type="Texture2D" uid="uid://urw22f2ivr8n" path="res://Rupia/rupia6.png" id="9_fsk4d"]
+[ext_resource type="Texture2D" uid="uid://7gu0t734d3jn" path="res://Rupia/rupia7.png" id="10_shyf5"]
+[ext_resource type="Texture2D" uid="uid://hktrgjo31mp6" path="res://Rupia/rupia8.png" id="11_5ure7"]
+[ext_resource type="Texture2D" uid="uid://cd0h8vacr2fjb" path="res://Rupia/rupia9.png" id="12_ihb6d"]
+[ext_resource type="Texture2D" uid="uid://bpggwq6oy20hr" path="res://Rupia/rupia10.png" id="13_sp3je"]
+[ext_resource type="Texture2D" uid="uid://dvpo63h1m0oji" path="res://Rupia/rupia11.png" id="14_6nhf2"]
+[ext_resource type="Texture2D" uid="uid://c3iqi0q300ooh" path="res://Rupia/rupia12.png" id="15_g6223"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vhxqh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_41shd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_cb8im")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ptsyy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_hq1op")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_kxho0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_fsk4d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_shyf5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_5ure7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ihb6d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_sp3je")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_6nhf2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_g6223")
+}],
+"loop": true,
+"name": &"default",
+"speed": 16.0
+}]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_lw7pw")
 
 [node name="ContenedorCorazones" type="HBoxContainer" parent="."]
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 42.0
-offset_bottom = 38.0
+offset_left = 6.0
+offset_top = 9.0
+offset_right = 74.0
+offset_bottom = 37.0
+scale = Vector2(0.785, 0.785)
 
 [node name="Corazon1" type="TextureRect" parent="ContenedorCorazones"]
+custom_minimum_size = Vector2(-0.745, 4.09)
 layout_mode = 2
 texture = ExtResource("2_ne771")
 
 [node name="Corazon2" type="TextureRect" parent="ContenedorCorazones"]
 layout_mode = 2
 texture = ExtResource("4_gv1iq")
+
+[node name="RupiaContenedor" type="HBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_top = 7.0
+offset_right = 0.625
+offset_bottom = 55.0
+grow_horizontal = 0
+
+[node name="IconoRupia" type="AnimatedSprite2D" parent="RupiaContenedor"]
+position = Vector2(-16, 15)
+scale = Vector2(1.53125, 1.5)
+sprite_frames = SubResource("SpriteFrames_vhxqh")
+frame_progress = 0.866695
+
+[node name="CantidadRupias" type="Label" parent="RupiaContenedor"]
+custom_minimum_size = Vector2(0.225, 0)
+layout_mode = 2
+text = "x"

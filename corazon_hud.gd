@@ -3,13 +3,19 @@ extends CanvasLayer
 
 @onready var corazon_lleno: Texture = $ContenedorCorazones/Corazon1.texture
 @onready var corazon_vacio: Texture = $ContenedorCorazones/Corazon2.texture
+@onready var label_rupias = $RupiaContenedor/CantidadRupias
+@onready var contenedor_rupias = $RupiaContenedor
+
 
 
 const VIDA_POR_CORAZON := 10
 @onready var container = $ContenedorCorazones
 var corazones: Array[TextureRect] = []
 
+
+
 func _ready():
+	$RupiaContenedor/IconoRupia.play()
 	print("ContenedorCorazones es: ", container)
 	for nodo in container.get_children():
 		if nodo is TextureRect:
@@ -22,13 +28,18 @@ func actualizar_vida(vida: int, vida_max: int):
 
 	for i in range(corazones.size()):
 		var valor = vida - (i * VIDA_POR_CORAZON)
+		
 		if valor >= VIDA_POR_CORAZON:
 			corazones[i].texture = corazon_lleno
+		elif valor > 0:
+			# Aquí podrías usar una textura de corazón a medias, si tienes
+			corazones[i].texture = corazon_lleno  # Si no tienes media, muestra lleno
 		else:
 			corazones[i].texture = corazon_vacio
-
 			
 func crear_corazones(cantidad: int):
+	print("Creando ", cantidad, " corazones")
+	
 	for hijo in container.get_children():
 		hijo.queue_free()
 	corazones.clear()
@@ -41,3 +52,8 @@ func crear_corazones(cantidad: int):
 		corazon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		container.add_child(corazon)
 		corazones.append(corazon)
+		
+func actualizar_rupias(cantidad: int):
+	label_rupias.text = str(cantidad)
+	if not contenedor_rupias.visible:
+		contenedor_rupias.visible = true  # Mostrar al recoger la primera rupia

@@ -5,9 +5,11 @@ var jugador: Node2D = null
 
 var vida_max := 100
 var vida := vida_max
+var parry := false
 
-var retroceso_duracion := 0.4
-var retroceso_velocidad := 300.0
+var retroceso_duracion := 0.5
+var retroceso_velocidadSword := 100.0
+var retroceso_velocidadShield := 350.0
 var en_retroceso := false
 var puede_causar_danio_contacto := true
 @export var cooldown_danio_contacto_tiempo := 2.0
@@ -42,8 +44,7 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 		jugador = body
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
-	if body == jugador:
-		jugador = null
+	pass
 
 func iniciar_cooldown_danio_contacto():
 	puede_causar_danio_contacto = false
@@ -56,16 +57,32 @@ func recibir_danio(cantidad: int):
 
 	if jugador != null:
 		var direccion_retroceso = (position - jugador.position).normalized()
-		aplicar_retroceso(direccion_retroceso)
+		aplicar_retrocesosword(direccion_retroceso)
 
 	if vida <= 0:
 		morir()
 
-func aplicar_retroceso(direccion: Vector2):
+func aplicar_retrocesosword(direccion: Vector2):
 	en_retroceso = true
-	velocity = direccion * retroceso_velocidad
+	velocity = direccion * retroceso_velocidadSword
 	await get_tree().create_timer(retroceso_duracion).timeout
 	en_retroceso = false
+
+func aplicar_retrocesoshield(direccion: Vector2):
+	en_retroceso = true
+	velocity = direccion * retroceso_velocidadShield
+	await get_tree().create_timer(retroceso_duracion).timeout
+	en_retroceso = false
+	
+func esta_haciendo_parry():
+	return parry
+
+func recibir_parry():
+	if jugador!=null:
+		var direction_retroceso = (position - jugador.position).normalized()
+		print("parry recibido")
+		aplicar_retrocesoshield(direction_retroceso)
+		
 
 func morir():
 	print("¡El enemigo ha muerto!")

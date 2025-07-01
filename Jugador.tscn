@@ -1,9 +1,14 @@
-[gd_scene load_steps=35 format=3 uid="uid://cljddt8c716gg"]
+[gd_scene load_steps=48 format=3 uid="uid://cljddt8c716gg"]
 
 [ext_resource type="Texture2D" uid="uid://1atuspaskis5" path="res://player/down/down_0.png" id="1_qnedo"]
+[ext_resource type="AudioStream" uid="uid://blw14ee280b2q" path="res://audio/blandirespada.wav" id="1_vhemd"]
+[ext_resource type="AudioStream" uid="uid://ca2dpbthymmrr" path="res://audio/swordhit.wav" id="2_vhemd"]
 [ext_resource type="Texture2D" uid="uid://cbmop4b0cmi8b" path="res://player/down/down_1.png" id="2_wyqjk"]
+[ext_resource type="AudioStream" uid="uid://2jq8a1g1qemv" path="res://audio/hit.wav" id="3_k3nsr"]
 [ext_resource type="Texture2D" uid="uid://b8hmjcepumq3s" path="res://player/down/down_2.png" id="3_k85er"]
 [ext_resource type="Texture2D" uid="uid://bet4ok36tu3yp" path="res://player/down/down_3.png" id="4_ebjds"]
+[ext_resource type="AudioStream" uid="uid://6clwv330mu32" path="res://audio/death.wav" id="4_xwfme"]
+[ext_resource type="AudioStream" uid="uid://cwn5nhqwif8f6" path="res://audio/attack/slash.wav" id="5_8nmth"]
 [ext_resource type="Texture2D" uid="uid://cli6u216ssgmn" path="res://player/down_attack/attack_down.png" id="5_y1dt5"]
 [ext_resource type="Texture2D" uid="uid://d05yo6cy7t7uk" path="res://player/down_idle/idle_down.png" id="6_au0nh"]
 [ext_resource type="Texture2D" uid="uid://beslldteft74p" path="res://player/left/left_0.png" id="7_76bt2"]
@@ -29,45 +34,76 @@
 [ext_resource type="Texture2D" uid="uid://boal5rajukokp" path="res://sword/left.png" id="27_vhemd"]
 [ext_resource type="Texture2D" uid="uid://bixiw0olixv32" path="res://sword/right.png" id="28_k3nsr"]
 [ext_resource type="Texture2D" uid="uid://bayni1pdowgtp" path="res://sword/up.png" id="29_xwfme"]
+[ext_resource type="Texture2D" uid="uid://cbq3v2upbj0kf" path="res://shieldDown.png" id="30_bs883"]
+[ext_resource type="Texture2D" uid="uid://dxcb5iujfwr58" path="res://shieldUp.png" id="31_kd5m5"]
+[ext_resource type="Texture2D" uid="uid://c0dn11bbem3rh" path="res://shieldRight.png" id="32_sbdbe"]
+[ext_resource type="Texture2D" uid="uid://bh7we4qh6ou0j" path="res://shieldLeft.png" id="33_naxmb"]
 
 [sub_resource type="GDScript" id="GDScript_5m5bb"]
 script/source = "extends CharacterBody2D
 
 signal vida_actualizada(vida_actual: int, vida_max: int)
-@onready var hud = get_tree().current_scene.get_node(\"HUD\")
+var hud : Node= null
 
-@export var speed := 170
+@export var speed := 200
 var current_direction := \"down\"
 var attacking := false
-
+var parry := false
 var vida_max := 30
 var vida := vida_max
 var dashing := false
-var dash_speed := 450
-var dash_duration := 0.4
-var dash_cooldown := 0.6
+var dash_speed := 500
+var dash_duration := 0.5
+var dash_cooldown := 1.5
 var puede_dash := true
 const VIDA_POR_CORAZON := 10
+var golpeo_enemigo = false
+var dash_velocity := Vector2.ZERO
 
 
 
 func _on_Area2D_body_entered(body: Node) -> void:
-	if body.is_in_group(\"enemigos\"):
+	if body.is_in_group(\"enemigos\") and not golpeo_enemigo:
 		body.recibir_danio(50)
+		$Swordhit.play()
+		golpeo_enemigo =true
+	
+	
+func conectar_hud(hud_node):
+	hud = hud_node
+	
+func _on_escudo_up_body_entered(body: Node2D) -> void:
+	print(\"¡ESCUDO ACTIVADO! Detectó a: \", body.name)
+	if parry and body.is_in_group(\"enemigos\"):
+		body.recibir_parry()
+
+func _on_escudo_down_body_entered(body: Node2D) -> void:
+	if parry and body.is_in_group(\"enemigos\"):
+		body.recibir_parry()
+
+func _on_escudo_left_body_entered(body: Node2D) -> void:
+	if parry and body.is_in_group(\"enemigos\"):
+		body.recibir_parry()
+
+func _on_escudo_right_body_entered(body: Node2D) -> void:
+	if parry and body.is_in_group(\"enemigos\"):
+		body.recibir_parry()
+
 
 func _ready():
-	hud.actualizar_vida(vida, vida_max)
 	add_to_group(\"jugador\")
 	$sword_area.body_entered.connect(_on_Area2D_body_entered)
 	$sword_area/AnimatedSprite2DSword.visible = false
 	actualizar_vida_visual()
+	ocultar_todos_los_escudos()
+
 
 func _physics_process(delta):
-	if attacking or dashing:
+	if attacking or parry:
+		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	# Movimiento normal
 	var input_vector = Vector2.ZERO
 
 	if Input.is_action_pressed(\"ui_right\"):
@@ -81,18 +117,23 @@ func _physics_process(delta):
 
 	input_vector = input_vector.normalized()
 	velocity = input_vector * speed
+
+	if dashing:
+		velocity = dash_velocity
+
 	move_and_slide()
 
-	# Dirección actual
 	if input_vector != Vector2.ZERO:
 		if abs(input_vector.x) > abs(input_vector.y):
 			current_direction = \"right\" if input_vector.x > 0 else \"left\"
 		else:
 			current_direction = \"down\" if input_vector.y > 0 else \"up\"
 
-		$AnimatedSprite2D.play(current_direction)
-	else:
+		if not dashing and not parry and not attacking:
+			$AnimatedSprite2D.play(current_direction)
+	elif not dashing and not parry and not attacking:
 		$AnimatedSprite2D.play(current_direction + \"_idle\")
+
 
 
 func _input(event):
@@ -100,9 +141,12 @@ func _input(event):
 		realizar_ataque()
 	if event.is_action_pressed(\"dash\"):
 		dash()
+	if event.is_action_pressed(\"parry\"):
+		realizar_parry()
 
 func realizar_ataque():
 	attacking = true
+	golpeo_enemigo = false
 	var sword = $sword_area/AnimatedSprite2DSword
 	var sword_collision = $sword_area/Hitbox
 	sword.visible = true
@@ -128,17 +172,64 @@ func realizar_ataque():
 	await get_tree().create_timer(0.2).timeout
 	sword.visible = false
 	sword_collision.disabled = true
+	if not golpeo_enemigo:
+		$AudioEspada.play()
 	attacking = false
 
+func realizar_parry():
+	if parry:
+		return
+	parry = true
+	$Dash.play()
+	velocity = Vector2.ZERO
+	$AnimatedSprite2D.play(current_direction + \"_idle\") # <- animación quieta
+	mostrar_escudo_con_colision(current_direction)
+	print(\"¡Parry activado en dirección: \", current_direction, \"!\")
 
+	await get_tree().create_timer(0.4).timeout
+
+	ocultar_todos_los_escudos()
+	parry = false
+	$AnimatedSprite2D.play(current_direction + \"_idle\") # <- reanudar animación
+	print(\"Parry finalizado\")
+
+
+func mostrar_escudo_con_colision(dir: String):
+	ocultar_todos_los_escudos()  # Asegura que solo uno esté visible
+	match dir:
+		\"up\":
+			$EscudoUp.visible = true
+			$EscudoUp/CollisionShape2D.disabled = false
+		\"down\":
+			$EscudoDown.visible = true
+			$EscudoDown/CollisionShape2D.disabled = false
+		\"left\":
+			$EscudoLeft.visible = true
+			$EscudoLeft/CollisionShape2D.disabled = false
+		\"right\":
+			$EscudoRight.visible = true
+			$EscudoRight/CollisionShape2D.disabled = false
+
+func ocultar_todos_los_escudos():
+	$EscudoUp.visible = false
+	$EscudoUp/CollisionShape2D.disabled = true
+	$EscudoDown.visible = false
+	$EscudoDown/CollisionShape2D.disabled = true
+	$EscudoLeft.visible = false
+	$EscudoLeft/CollisionShape2D.disabled = true
+	$EscudoRight.visible = false
+	$EscudoRight/CollisionShape2D.disabled = true
+	
+	
 func recibir_danio(cantidad: int):
+	
+	$Hit.play()
 	vida = clamp(vida - cantidad, 0, vida_max)
 	hud.actualizar_vida(vida, vida_max)
 	print(\"vida restante: %d\" % vida)
 
 	if vida <= 0:
 		morir()
-
 	if vida <= 0:
 		morir()
 func curarse(cantidad: int):
@@ -153,7 +244,13 @@ func aumentar_vida_max():
 
 func morir():
 	print(\"¡El jugador ha muerto!\")
+	var musica = get_tree().current_scene.get_node_or_null(\"MusicaFondo\")
+	if musica and musica is AudioStreamPlayer2D:
+		musica.stop()
+	$Death.play()
+	await get_tree().create_timer(0.33).timeout # ajusta a duración real del sonido
 	queue_free()
+
 
 func actualizar_vida_visual():
 	emit_signal(\"vida_actualizada\", vida, vida_max)
@@ -167,22 +264,27 @@ func dash():
 
 	var dash_vector = velocity.normalized()
 	if dash_vector == Vector2.ZERO:
-		# Si no se está moviendo, dash en la dirección actual
 		match current_direction:
 			\"right\": dash_vector = Vector2.RIGHT
 			\"left\": dash_vector = Vector2.LEFT
 			\"up\": dash_vector = Vector2.UP
 			\"down\": dash_vector = Vector2.DOWN
 
-	velocity = dash_vector * dash_speed
+	dash_velocity = dash_vector * dash_speed
+	$Dash.play()
 
 	await get_tree().create_timer(dash_duration).timeout
 	dashing = false
+	dash_velocity = Vector2.ZERO
 
-	# Espera cooldown antes de permitir otro dash
 	await get_tree().create_timer(dash_cooldown).timeout
 	puede_dash = true
-	
+
+var rupias := 0
+
+func agregar_rupias(cantidad: int):
+	rupias += cantidad
+	hud.actualizar_rupias(rupias)
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_73nau"]
@@ -321,7 +423,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_loye7"]
-size = Vector2(60, 58.5)
+size = Vector2(50, 53)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4jjxg"]
 animations = [{
@@ -369,7 +471,20 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_85cto"]
 size = Vector2(11, 34.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t0lea"]
+size = Vector2(34.125, 5.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kd5m5"]
+size = Vector2(35, 6.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbdbe"]
+size = Vector2(5.875, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_naxmb"]
+size = Vector2(5.5, 42.3438)
+
 [node name="Jugador" type="CharacterBody2D" groups=["Jugador"]]
+scale = Vector2(0.82, 0.82)
 collision_layer = 2
 collision_mask = 25
 script = SubResource("GDScript_5m5bb")
@@ -378,10 +493,11 @@ script = SubResource("GDScript_5m5bb")
 position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_73nau")
 animation = &"down"
+frame_progress = 0.284329
 
 [node name="Hurtbox" type="CollisionShape2D" parent="."]
 light_mask = 0
-position = Vector2(0, -0.75)
+position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_loye7")
 
 [node name="sword_area" type="Area2D" parent="."]
@@ -398,4 +514,81 @@ visibility_layer = 8
 position = Vector2(0.5, 2.75)
 shape = SubResource("RectangleShape2D_85cto")
 
+[node name="EscudoDown" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 8
+
+[node name="down" type="Sprite2D" parent="EscudoDown"]
+position = Vector2(-15, 31)
+scale = Vector2(2.325, 2.325)
+texture = ExtResource("30_bs883")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EscudoDown"]
+position = Vector2(-15, 53)
+shape = SubResource("RectangleShape2D_t0lea")
+
+[node name="EscudoUp" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 9
+
+[node name="up" type="Sprite2D" parent="EscudoUp"]
+z_index = -1
+position = Vector2(-9, -21)
+scale = Vector2(2.315, 2.315)
+texture = ExtResource("31_kd5m5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EscudoUp"]
+position = Vector2(-8.5, -40.75)
+shape = SubResource("RectangleShape2D_kd5m5")
+
+[node name="EscudoRight" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 9
+
+[node name="right" type="Sprite2D" parent="EscudoRight"]
+position = Vector2(37.8625, 11.725)
+scale = Vector2(2.68, 2.68)
+texture = ExtResource("32_sbdbe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EscudoRight"]
+position = Vector2(50.0625, 10)
+shape = SubResource("RectangleShape2D_sbdbe")
+
+[node name="EscudoLeft" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 9
+
+[node name="left" type="Sprite2D" parent="EscudoLeft"]
+position = Vector2(-36, 13)
+scale = Vector2(2.68, 2.68)
+texture = ExtResource("33_naxmb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EscudoLeft"]
+position = Vector2(-47.25, 11)
+shape = SubResource("RectangleShape2D_naxmb")
+
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-1.21951, 1.21951)
+rotation_smoothing_enabled = true
+
+[node name="AudioEspada" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_vhemd")
+volume_db = 5.021
+
+[node name="Swordhit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_vhemd")
+volume_db = -4.303
+
+[node name="Hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_k3nsr")
+
+[node name="Death" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_xwfme")
+
+[node name="Dash" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_8nmth")
+
+[connection signal="body_entered" from="EscudoDown" to="." method="_on_escudo_down_body_entered"]
+[connection signal="body_entered" from="EscudoUp" to="." method="_on_escudo_up_body_entered"]
+[connection signal="body_entered" from="EscudoRight" to="." method="_on_escudo_right_body_entered"]
+[connection signal="body_entered" from="EscudoLeft" to="." method="_on_escudo_left_body_entered"]

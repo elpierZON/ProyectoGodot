@@ -1,26 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://bsp55ckn702qm"]
+[gd_scene load_steps=6 format=3 uid="uid://bsp55ckn702qm"]
 
 [ext_resource type="PackedScene" uid="uid://cljddt8c716gg" path="res://Jugador.tscn" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://did8khqoej8vh" path="res://main.gd" id="1_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://dsh5lwnx6rju6" path="res://spirit.tscn" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://bqv6ihnriuo62" path="res://transition.tscn" id="5_7mycd"]
 [ext_resource type="PackedScene" uid="uid://do8xysotdkpmb" path="res://HUD.tscn" id="5_lquwl"]
+[ext_resource type="AudioStream" uid="uid://c1gf0jmvfcxbs" path="res://audio/main.ogg" id="6_7mycd"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_1bvp3")
 
+[node name="ContenedorMapa" type="Node2D" parent="."]
+
 [node name="HUD" parent="." instance=ExtResource("5_lquwl")]
 
 [node name="Jugador" parent="." instance=ExtResource("1_0xm2m")]
-position = Vector2(61, 83)
+position = Vector2(108, 174)
 
-[node name="Spirit" parent="." instance=ExtResource("2_h2yge")]
-position = Vector2(258, 288)
+[node name="MusicaFondo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_7mycd")
+autoplay = true
 
-[node name="Spirit4" parent="." instance=ExtResource("2_h2yge")]
-position = Vector2(708, 169)
-
-[node name="Spirit3" parent="." instance=ExtResource("2_h2yge")]
-position = Vector2(572, 359)
-
-[node name="Spirit2" parent="." instance=ExtResource("2_h2yge")]
-position = Vector2(445, 140)
+[node name="Transicion" parent="." instance=ExtResource("5_7mycd")]

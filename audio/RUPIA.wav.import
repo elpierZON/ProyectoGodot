@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://ca2dpbthymmrr"
-path="res://.godot/imported/sword.wav-cc333997fe91adba4a58c99a6b14cc09.sample"
+uid="uid://kib1k8h8yfbq"
+path="res://.godot/imported/RUPIA.wav-ba8bd095b0de2d8e2a1c1754a8cadfcf.sample"
 
 [deps]
 
-source_file="res://audio/sword.wav"
-dest_files=["res://.godot/imported/sword.wav-cc333997fe91adba4a58c99a6b14cc09.sample"]
+source_file="res://audio/RUPIA.wav"
+dest_files=["res://.godot/imported/RUPIA.wav-ba8bd095b0de2d8e2a1c1754a8cadfcf.sample"]
 
 [params]
 
