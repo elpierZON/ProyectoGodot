@@ -1,12 +1,12 @@
 extends CharacterBody2D
+class_name Spirit
 
 var jugador: Node2D = null
 @export var vel: float = 80.0
-
-var vida_max := 100
+#var anim := $AnimatedSprite2D
+@export var vida_max := 150
 var vida := vida_max
 var parry := false
-
 var retroceso_duracion := 0.5
 var retroceso_velocidadSword := 100.0
 var retroceso_velocidadShield := 350.0
@@ -14,12 +14,18 @@ var en_retroceso := false
 var puede_causar_danio_contacto := true
 @export var cooldown_danio_contacto_tiempo := 2.0
 
+
+
 func _physics_process(delta: float) -> void:
+	#print("🧠 Spirit procesando física")
+
+	$AnimatedSprite2D.play("move")
 	if en_retroceso:
 		move_and_slide()
 		return
 
 	if jugador != null:
+		#print("🎯 Posición del jugador:", jugador.position)
 		var direccion = position.direction_to(jugador.position)
 		var distancia = position.distance_to(jugador.position)
 
@@ -32,7 +38,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Revisar colisiones y hacer daño si toca al jugador
+
 	for i in range(get_slide_collision_count()):
 		var col = get_slide_collision(i)
 		if col.get_collider() and col.get_collider().is_in_group("jugador") and puede_causar_danio_contacto:
@@ -80,7 +86,7 @@ func esta_haciendo_parry():
 func recibir_parry():
 	if jugador!=null:
 		var direction_retroceso = (position - jugador.position).normalized()
-		print("parry recibido")
+		#print("parry recibido")
 		aplicar_retrocesoshield(direction_retroceso)
 		
 

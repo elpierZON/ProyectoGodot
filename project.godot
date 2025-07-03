@@ -50,6 +50,7 @@ parry={
 2d_physics/layer_4="enemigos"
 2d_physics/layer_5="objetos"
 2d_physics/layer_6="Shield"
+2d_physics/layer_7="bolita"
 
 [rendering]
 

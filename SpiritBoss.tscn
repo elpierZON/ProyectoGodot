@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bkw3wa2i2au3w"]
+
+[ext_resource type="PackedScene" uid="uid://dsh5lwnx6rju6" path="res://spirit.tscn" id="1_rfalh"]
+[ext_resource type="Script" uid="uid://cw74n53palrj5" path="res://spirit_boss.gd" id="2_g7w8d"]
+[ext_resource type="PackedScene" uid="uid://cder3pobrb0n5" path="res://Bolita.tscn" id="3_sh5fh"]
+
+[node name="SpiritBoss" instance=ExtResource("1_rfalh")]
+scale = Vector2(1.07, 1.07)
+script = ExtResource("2_g7w8d")
+escena_bolita = ExtResource("3_sh5fh")
+ataque_cooldown = 5.0
