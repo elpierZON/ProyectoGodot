@@ -41,7 +41,7 @@ script = ExtResource("1_dwg7c")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_lmf7m")
 animation = &"move"
-frame_progress = 0.265465
+frame_progress = 0.462097
 
 [node name="Hitbox" type="CollisionShape2D" parent="." groups=["enemigos"]]
 light_mask = 11

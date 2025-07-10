@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmt2ycdk1lpgg"]
+
+[ext_resource type="FontFile" uid="uid://ca7w4ue2btino" path="res://PixelatedEleganceRegular-ovyAA.ttf" id="1_snwos"]
+[ext_resource type="Script" uid="uid://bofbkokv8im85" path="res://gameover.gd" id="1_xdtg7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xdtg7"]
+font = ExtResource("1_snwos")
+font_size = 50
+
+[node name="GameOverUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 899.0
+offset_bottom = 720.0
+script = ExtResource("1_xdtg7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 903.0
+offset_bottom = 714.0
+color = Color(1, 1, 1, 0)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 273.0
+offset_top = 223.0
+offset_right = 645.0
+offset_bottom = 338.0
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_xdtg7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 317.0
+offset_top = 370.0
+offset_right = 593.0
+offset_bottom = 494.0
+
+[node name="Reintentar" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "RETRY"
+
+[node name="Salir" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "EXIT
+"

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://deo817v8xnsll"
+path="res://.godot/imported/Beneath The Mask [8-bit; VRC6] - Persona 5.mp3-7b3f5b3b1762eec967384b76e4ebbc27.mp3str"
+
+[deps]
+
+source_file="res://Beneath The Mask [8-bit; VRC6] - Persona 5.mp3"
+dest_files=["res://.godot/imported/Beneath The Mask [8-bit; VRC6] - Persona 5.mp3-7b3f5b3b1762eec967384b76e4ebbc27.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

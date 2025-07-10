@@ -6,20 +6,19 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_rq2o1"]
 radius = 11.0454
 
-[node name="Bolita" type="Area2D"]
+[node name="Bolita" type="Area2D" groups=["bolita"]]
 scale = Vector2(1.44, 1.44)
 collision_layer = 64
 collision_mask = 34
 script = ExtResource("1_scxd3")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["bolita"]]
 position = Vector2(18, 30)
 scale = Vector2(5.89, 5.437)
 texture = ExtResource("2_tmnx3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["bolita"]]
 position = Vector2(-3, 0)
 shape = SubResource("CircleShape2D_rq2o1")
 
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

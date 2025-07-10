@@ -74,18 +74,30 @@ func _on_escudo_up_body_entered(body: Node2D) -> void:
 	print(\"¡ESCUDO ACTIVADO! Detectó a: \", body.name)
 	if parry and body.is_in_group(\"enemigos\"):
 		body.recibir_parry()
+	elif body.is_in_group(\"bolita\"):
+		print(\"escudo bloqea bolita\")
+		body.queue_free()
 
 func _on_escudo_down_body_entered(body: Node2D) -> void:
 	if parry and body.is_in_group(\"enemigos\"):
 		body.recibir_parry()
+	elif body.is_in_group(\"bolita\"):
+		print(\"escudo bloqea bolita\")
+		body.queue_free()
 
 func _on_escudo_left_body_entered(body: Node2D) -> void:
 	if parry and body.is_in_group(\"enemigos\"):
 		body.recibir_parry()
+	elif body.is_in_group(\"bolita\"):
+		print(\"escudo bloqea bolita\")
+		body.queue_free()
 
 func _on_escudo_right_body_entered(body: Node2D) -> void:
 	if parry and body.is_in_group(\"enemigos\"):
 		body.recibir_parry()
+	elif body.is_in_group(\"bolita\"):
+		print(\"escudo bloqea bolita\")
+		body.queue_free()
 
 
 func _ready():
@@ -131,8 +143,6 @@ func _physics_process(delta):
 			$AnimatedSprite2D.play(current_direction)
 	elif not dashing and not parry and not attacking:
 		$AnimatedSprite2D.play(current_direction + \"_idle\")
-
-
 
 func _input(event):
 	if event.is_action_pressed(\"attack\") and not attacking:
@@ -218,7 +228,6 @@ func ocultar_todos_los_escudos():
 	$EscudoRight.visible = false
 	$EscudoRight/CollisionShape2D.disabled = true
 	
-	
 func recibir_danio(cantidad: int):
 	
 	$Hit.play()
@@ -228,8 +237,7 @@ func recibir_danio(cantidad: int):
 
 	if vida <= 0:
 		morir()
-	if vida <= 0:
-		morir()
+	
 func curarse(cantidad: int):
 	vida += cantidad
 	vida = clamp(vida, 0, vida_max)
@@ -241,14 +249,10 @@ func aumentar_vida_max():
 	actualizar_vida_visual()
 
 func morir():
-	print(\"¡El jugador ha muerto!\")
-	var musica = get_tree().current_scene.get_node_or_null(\"MusicaFondo\")
-	if musica and musica is AudioStreamPlayer2D:
-		musica.stop()
-	$Death.play()
-	await get_tree().create_timer(0.33).timeout # ajusta a duración real del sonido
-	queue_free()
-
+	print(\"Jugador ha muerto\")
+	var main = get_tree().current_scene
+	main.get_node(\"GameOverUI\").visible = true
+	get_tree().paused = true  # Pausa el juego mientras se muestra la pantalla
 
 func actualizar_vida_visual():
 	emit_signal(\"vida_actualizada\", vida, vida_max)
@@ -256,10 +260,8 @@ func actualizar_vida_visual():
 func dash():
 	if not puede_dash or dashing:
 		return
-
 	dashing = true
 	puede_dash = false
-
 	var dash_vector = velocity.normalized()
 	if dash_vector == Vector2.ZERO:
 		match current_direction:
@@ -491,7 +493,6 @@ script = SubResource("GDScript_5m5bb")
 position = Vector2(0, -3)
 sprite_frames = SubResource("SpriteFrames_73nau")
 animation = &"down"
-frame_progress = 0.284329
 
 [node name="Hurtbox" type="CollisionShape2D" parent="."]
 light_mask = 0

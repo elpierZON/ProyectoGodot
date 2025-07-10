@@ -8,4 +8,4 @@
 scale = Vector2(1.07, 1.07)
 script = ExtResource("2_g7w8d")
 escena_bolita = ExtResource("3_sh5fh")
-ataque_cooldown = 5.0
+ataque_cooldown = 2.0

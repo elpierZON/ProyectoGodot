@@ -14,18 +14,12 @@ var en_retroceso := false
 var puede_causar_danio_contacto := true
 @export var cooldown_danio_contacto_tiempo := 2.0
 
-
-
 func _physics_process(delta: float) -> void:
-	#print("🧠 Spirit procesando física")
-
 	$AnimatedSprite2D.play("move")
 	if en_retroceso:
 		move_and_slide()
 		return
-
 	if jugador != null:
-		#print("🎯 Posición del jugador:", jugador.position)
 		var direccion = position.direction_to(jugador.position)
 		var distancia = position.distance_to(jugador.position)
 
@@ -37,7 +31,6 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 
 	move_and_slide()
-
 
 	for i in range(get_slide_collision_count()):
 		var col = get_slide_collision(i)

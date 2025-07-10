@@ -1,11 +1,10 @@
 extends Spirit
 
 @export var escena_bolita: PackedScene
-@export var ataque_cooldown: float = 5.0
+@export var ataque_cooldown: float = 3.0
 
 var ataques_activos: bool = false
 var en_furia: bool = false
-
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
@@ -15,7 +14,7 @@ func _input(event):
 
 func _ready():
 	vida = 500
-	vel = 90
+	vel = 100
 	vida_max = vida
 	if not escena_bolita:
 		push_error("¡ERROR: La 'Escena Bolita' no está asignada en el Inspector para el SpiritBoss!")
@@ -26,6 +25,12 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 			return
 		jugador = body
 		print("✅ Jugador detectado. ¡Iniciando secuencia de ataque!")
+		# Cambiar música
+		var main = get_tree().current_scene
+		if main.has_node("MusicaFondo") and main.has_node("MusicaBoss"):
+			main.get_node("MusicaFondo").stop()
+			main.get_node("MusicaBoss").play()
+		
 		iniciar_secuencia_ataque()
 
 func _on_detection_area_body_exited(body: Node2D) -> void:
@@ -60,8 +65,8 @@ func activar_furia():
 	if not en_furia:
 		en_furia = true
 		vel *= 1.5
-		ataque_cooldown /= 2 # ¡El cooldown se reduce a la mitad en modo furia!
-		print("🔥 Boss en modo furia! Cooldown reducido a:", ataque_cooldown)
+		ataque_cooldown /= 2 
+		print("Boss en modo furia! Cooldown reducido a:", ataque_cooldown)
 		
 func _physics_process(delta):
 	super._physics_process(delta)

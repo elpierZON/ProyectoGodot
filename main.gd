@@ -3,10 +3,6 @@ extends Node2D
 var mapa_actual: Node = null
 
 func _ready():
-	#print($Transicion)  
-	#print($Transicion)
-	#print($Transicion/AnimationPlayer)
-	#print($Transicion/AnimationPlayer.has_animation("fade_to_black"))
 	$Jugador.conectar_hud($HUD)  
 	$Jugador.vida_actualizada.connect($HUD.actualizar_vida)  
 	$Jugador.actualizar_vida_visual() 
@@ -14,15 +10,12 @@ func _ready():
 	cargar_mapa("res://mapas/mapa_aldea.tscn") 
 
 func cargar_mapa(path: String, spawn_name := "SpawnJugador"):
-
 	if mapa_actual:
 		mapa_actual.queue_free()
-
 	mapa_actual = load(path).instantiate()
 	$ContenedorMapa.add_child(mapa_actual)
 
 	var spawn = mapa_actual.get_node_or_null(spawn_name)
-
 	if spawn:
 		$Jugador.global_position = spawn.global_position
 	else:
@@ -36,6 +29,7 @@ func cargar_mapa(path: String, spawn_name := "SpawnJugador"):
 	var puerta_retorno = mapa_actual.get_node_or_null("Retorno")
 	if puerta_retorno:
 		puerta_retorno.body_entered.connect(_on_puerta_retorno_body_entered)
+	
 	var camino_boss = mapa_actual.get_node_or_null("CaminoBoss")
 	if camino_boss:
 		camino_boss.body_entered.connect(_on_camino_boss_body_entered)
@@ -59,7 +53,6 @@ func _on_puerta_body_entered(body):
 		cambiar_mapa_con_transicion("res://mapas/mapa_01.tscn", "SpawnDesdeAldea")
 
 func cambiar_mapa_con_transicion(path: String, spawn_name := "SpawnJugador") -> void:
-
 	var transicion = $Transicion
 	var anim = transicion.get_node("AnimationPlayer")
 	anim.play("fade_to_black")

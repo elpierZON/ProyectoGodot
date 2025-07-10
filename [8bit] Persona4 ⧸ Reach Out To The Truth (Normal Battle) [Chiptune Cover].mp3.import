@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://be4u2mov67xiu"
+path="res://.godot/imported/[8bit] Persona4 ⧸ Reach Out To The Truth (Normal Battle) [Chiptune Cover].mp3-932aed7870b806328156b3c0a11b6d06.mp3str"
+
+[deps]
+
+source_file="res://[8bit] Persona4 ⧸ Reach Out To The Truth (Normal Battle) [Chiptune Cover].mp3"
+dest_files=["res://.godot/imported/[8bit] Persona4 ⧸ Reach Out To The Truth (Normal Battle) [Chiptune Cover].mp3-932aed7870b806328156b3c0a11b6d06.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
