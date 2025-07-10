@@ -1,6 +1,8 @@
 extends Node2D
 
 var mapa_actual: Node = null
+var jugador_ha_muerto := false
+
 
 func _ready():
 	$Jugador.conectar_hud($HUD)  

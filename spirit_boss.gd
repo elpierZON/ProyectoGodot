@@ -13,7 +13,7 @@ func _input(event):
 		disparar_bolita()
 
 func _ready():
-	vida = 600
+	vida = 900
 	vel = 100
 	vida_max = vida
 	if not escena_bolita:

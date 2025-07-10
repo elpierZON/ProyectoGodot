@@ -59,6 +59,8 @@ var puede_dash := true
 const VIDA_POR_CORAZON := 10
 var golpeo_enemigo = false
 var dash_velocity := Vector2.ZERO
+var muerto := false
+
 
 func _on_Area2D_body_entered(body: Node) -> void:
 	if body.is_in_group(\"enemigos\") and not golpeo_enemigo:
@@ -198,7 +200,7 @@ func realizar_parry():
 
 	ocultar_todos_los_escudos()
 	parry = false
-	$AnimatedSprite2D.play(current_direction + \"_idle\") # <- reanudar animación
+	$AnimatedSprite2D.play(current_direction + \"_idle\") 
 	print(\"Parry finalizado\")
 
 
@@ -229,6 +231,8 @@ func ocultar_todos_los_escudos():
 	$EscudoRight/CollisionShape2D.disabled = true
 	
 func recibir_danio(cantidad: int):
+	if muerto:
+		return
 	
 	$Hit.play()
 	vida = clamp(vida - cantidad, 0, vida_max)
