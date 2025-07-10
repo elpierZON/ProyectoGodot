@@ -245,14 +245,15 @@ func curarse(cantidad: int):
 
 func aumentar_vida_max():
 	vida_max += 1
-	vida = vida_max # al obtener un corazón completo, se llena
+	vida = vida_max
 	actualizar_vida_visual()
 
 func morir():
 	print(\"Jugador ha muerto\")
-	var main = get_tree().current_scene
-	main.get_node(\"GameOverUI\").visible = true
-	get_tree().paused = true  # Pausa el juego mientras se muestra la pantalla
+	get_tree().paused = false  
+	get_tree().current_scene.ir_a_game_over()
+
+
 
 func actualizar_vida_visual():
 	emit_signal(\"vida_actualizada\", vida, vida_max)

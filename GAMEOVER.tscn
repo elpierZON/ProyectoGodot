@@ -10,15 +10,15 @@ font_size = 50
 [node name="GameOverUI" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 899.0
-offset_bottom = 720.0
 script = ExtResource("1_xdtg7")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="FondoNegro" type="ColorRect" parent="."]
 layout_mode = 0
-offset_right = 903.0
-offset_bottom = 714.0
-color = Color(1, 1, 1, 0)
+offset_left = -199.0
+offset_top = -90.0
+offset_right = 1248.0
+offset_bottom = 894.0
+color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0

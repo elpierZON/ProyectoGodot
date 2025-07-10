@@ -17418,13 +17418,8 @@ tile_map_data = PackedByteArray("AACd/zwAAgAAAD4AAFCd/z0AAgABAD4AAFCd/z4AAgACAD4
 tile_set = SubResource("TileSet_wtp6w")
 
 [node name="SpiritBoss" parent="." instance=ExtResource("32_k8654")]
-position = Vector2(2624, 123)
-scale = Vector2(1.215, 1.215)
-ataque_cooldown = 3.0
-
-[node name="SpiritBoss2" parent="." instance=ExtResource("32_k8654")]
-position = Vector2(2629, 407)
-scale = Vector2(1.215, 1.215)
+position = Vector2(2657, 224)
+scale = Vector2(1.41, 1.41)
 ataque_cooldown = 3.0
 
 [connection signal="body_entered" from="Rupia" to="Rupia" method="_on_body_entered"]

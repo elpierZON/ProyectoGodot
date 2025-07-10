@@ -13,6 +13,9 @@ var retroceso_velocidadShield := 350.0
 var en_retroceso := false
 var puede_causar_danio_contacto := true
 @export var cooldown_danio_contacto_tiempo := 2.0
+var en_furia := false
+var velocidad_original := vel  
+
 
 func _physics_process(delta: float) -> void:
 	$AnimatedSprite2D.play("move")
@@ -53,6 +56,9 @@ func iniciar_cooldown_danio_contacto():
 func recibir_danio(cantidad: int):
 	vida -= cantidad
 	print("Enemigo recibió daño. Vida restante: ", vida)
+	
+	if vida <= 100 and not en_furia:
+		activar_furia()
 
 	if jugador != null:
 		var direccion_retroceso = (position - jugador.position).normalized()
@@ -82,6 +88,15 @@ func recibir_parry():
 		#print("parry recibido")
 		aplicar_retrocesoshield(direction_retroceso)
 		
+		
+func activar_furia():
+	if en_furia:
+		return 
+	en_furia = true
+	vel *= 1.7
+	print("¡El enemigo ha entrado en FURIA!")
+	$AnimatedSprite2D.modulate = Color(1, 0.5, 0.5)  
+
 
 func morir():
 	print("¡El enemigo ha muerto!")

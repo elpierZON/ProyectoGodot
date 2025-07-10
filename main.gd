@@ -63,3 +63,10 @@ func cambiar_mapa_con_transicion(path: String, spawn_name := "SpawnJugador") -> 
 func _on_puerta_retorno_body_entered(body):
 	if body.is_in_group("jugador"):
 		cambiar_mapa_con_transicion("res://mapas/mapa_aldea.tscn", "SpawnDesdeMapa01")
+
+func ir_a_game_over():
+	var anim = $Transicion.get_node("AnimationPlayer")
+	anim.play("fade_to_black")
+	await anim.animation_finished
+
+	get_tree().change_scene_to_file("res://GAMEOVER.tscn")

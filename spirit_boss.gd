@@ -4,7 +4,7 @@ extends Spirit
 @export var ataque_cooldown: float = 3.0
 
 var ataques_activos: bool = false
-var en_furia: bool = false
+#var en_furia: bool = false
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
@@ -13,7 +13,7 @@ func _input(event):
 		disparar_bolita()
 
 func _ready():
-	vida = 500
+	vida = 600
 	vel = 100
 	vida_max = vida
 	if not escena_bolita:
@@ -66,7 +66,8 @@ func activar_furia():
 		en_furia = true
 		vel *= 1.5
 		ataque_cooldown /= 2 
-		print("Boss en modo furia! Cooldown reducido a:", ataque_cooldown)
+		#print("Boss en modo furia! Cooldown reducido a:", ataque_cooldown)
+		$AnimatedSprite2D.modulate = Color(1, 0.5, 0.5)  
 		
 func _physics_process(delta):
 	super._physics_process(delta)
